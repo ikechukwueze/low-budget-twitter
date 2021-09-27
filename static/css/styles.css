@@ -1,0 +1,9 @@
+.bi:hover {
+    cursor: pointer;
+}
+
+img.profile-pic {
+    height: 60px;
+    width: 60px;
+    overflow: hidden;
+}

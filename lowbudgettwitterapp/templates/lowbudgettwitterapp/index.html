@@ -1,0 +1,208 @@
+{% extends 'lowbudgettwitterapp/base.html' %}
+{% load static %}
+    
+{% block content %}
+
+    <main class="container" id="vue-app">
+      <div class="row">
+        <div class="col-sm-12 col-md-9 my-3">
+          <div class="sticky-md-top bg-white pt-3">
+            <!--Tweet input -->
+            <h4 class="font-monospace">Timeline</h4>
+            <div class="d-flex p-3 my-2 border rounded-3 mb-3 w-100 bg-light">
+              <div class="flex-shrink-0">
+                <img class="rounded-circle profile-pic" src="{{ account.profile_pic_url }}">
+              </div>
+              <div class="card ms-1 border-0 w-100 bg-transparent">
+                <div class="card-header border-0 bg-transparent">
+                  <span class="fw-bold">@{{ account.username }} <i class="bi bi-patch-check-fill" style="font-size:1rem; color: blue;"></i></span>
+                  <br>
+                  <span>{{ account.display_name }}</span>
+                </div>
+                <form @submit.prevent="post_tweet" id="post-tweet-form">
+                  {% csrf_token %}
+                  <div class="card-body py-1 bg-transparent">
+                    <textarea class="form-control bg-transparent" minlength="1" maxlength="280s" id="exampleFormControlTextarea1" placeholder="Penny for your thoughts." rows="3" required v-model="form.tweet"></textarea>
+                  </div>
+                  <div class="card-footer text-muted d-flex justify-content-end border-0 bg-white bg-transparent">
+                    <button class="btn btn-sm" type="submit" style="background-color: blue; color: white;">Tweet!</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!--Tweets-->
+          <tweet
+            v-for="tweet in all_tweets"
+            :key="tweet.id"
+            :id="tweet.id"
+            :tweet="tweet.tweet"
+            :author="tweet.author.username"
+            :display_name="tweet.author.display_name"
+            :date_time="tweet.formatted_date_time"
+            :likes="tweet.likes"
+            :retweets="tweet.retweets"
+            :profile_pic="tweet.author.profile_pic"
+          ></tweet>
+
+        </div>
+        <!--Trending-->
+        <div class="col-sm-12 col-md-3 py-3 d-none d-md-block">
+          <div class="sticky-top pt-3">
+            <h4 class="font-monospace">Trending</h4>
+            <ol class="list-group list-group-numbered">
+              <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold ">ENDSARS</div>
+                </div>
+                <div>
+                  <span class="text-muted">12.1k</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold">Ronaldo</div>
+                </div>
+                <div>
+                  <span class="text-muted">12.1k</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold">Buhari</div>
+                </div>
+                <div>
+                  <span class="text-muted">12.1k</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold">Messi</div>
+                </div>
+                <div>
+                  <span class="text-muted">12.1k</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold">Lola</div>
+                </div>
+                <div>
+                  <span class="text-muted">12.1k</span>
+                </div>
+              </li>
+            </ol>
+            <div class="py-3">
+              <form class="input-group" action="">
+                <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search">
+                <button class="btn btn-primary" id="button-search" type="button">Go!</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!--Off canvas for Trending-->
+        <div class="offcanvas offcanvas-end w-75" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+          <div class="offcanvas-header">
+            <h5 id="offcanvasRightLabel">Offcanvas right</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <h4 class="font-monospace">Trending</h4>
+            <ol class="list-group list-group-numbered">
+              <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold ">ENDSARS</div>
+                </div>
+                <div>
+                  <span class="text-muted">12.1k</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                  <div class="fw-normal">Ronaldo</div>
+                </div>
+                <div>
+                  <span class="text-muted">12.1k</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold">Buhari</div>
+                </div>
+                <div>
+                  <span class="text-muted">12.1k</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold">Messi</div>
+                </div>
+                <div>
+                  <span class="text-muted">12.1k</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold">Lola</div>
+                </div>
+                <div>
+                  <span class="text-muted">12.1k</span>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>    
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <form enctype="multipart/form-data" action="{% url 'update_profile' %}" method="POST">
+              {% csrf_token %}
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="staticBackdropLabel">Profile</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="mb-2 text-center">
+                    <div class="text-center">
+                      <!--<img src="{{ user_profile.profile_pic.url }}" class="img-fluid rounded-circle" alt="...">-->
+                      <img src="{{ account.profile_pic_url }}" class="img-fluid rounded-circle" alt="..." style="height: 150px; width: 150px; overflow: hidden;">
+                    </div>
+                    <div>
+                      <label for="profile-pic-upload">
+                        <i class="bi bi-camera" style="font-size: 2rem; cursor: pointer;"></i>
+                      </label>
+                      <p><small id='profile-icon-label' class='text-muted'>Click icon to change profile pic</small></p>
+                    </div>
+                    <div class="text-center visually-hidden">
+                      {{ profileform.profile_pic }}
+                    </div>
+                  </div>
+                  <div class="text-muted d-flex justify-content-around border-0 bg-white mb-2">
+                    <div class=""><small>Following: <span>{{ following_count }}</span></small></div>
+                    <div class=""><small>Followers: <span>{{ follower_count }}</span></small></div>
+                  </div>
+                  <div class="form-floating mb-2">
+                    {{ profileform.display_name }}
+                    <label for="floatingdisplayname"><small>Display name</small></label>
+                  </div>
+                  <div class="form-floating mb-2">
+                    {{ profileform.bio }}
+                    <label for="floatingbio"><small>Bio</small></label>
+                  </div>
+                  <div>
+                    {{profileform.user}}
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+{% endblock %}
